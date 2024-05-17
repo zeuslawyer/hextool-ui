@@ -7,14 +7,17 @@ import {hexstring} from "@/lib/types";
 
 const AbiDecodeComponent = () => {
   // State variables to store input values
-  const [hexInput, setHexInput] = useState<hexstring | string>("");
-  const [valuesInput, setValuesInput] = useState("");
+  let [hexInput, setHexInput] = useState<hexstring | string>("");
+  let [valuesInput, setValuesInput] = useState("");
 
   // Function to handle decoding
   const handleDecode = async () => {
     // Implement decoding logic here
     console.log("Decoding...");
-    const decoded = decodeAbiParameters(parseAbiParameters(valuesInput), hexInput);
+    if (hexInput.slice(0, 2) !== "0x") {
+      hexInput = `0x${hexInput}`;
+    }
+    const decoded = decodeAbiParameters(parseAbiParameters(valuesInput), hexInput as hexstring);
     console.log(decoded);
   };
 
@@ -35,7 +38,7 @@ const AbiDecodeComponent = () => {
       </div>
       <div className="mb-10">
         <label htmlFor="values" className="block text-md font-medium text-gray-700">
-          Values, separated by commas
+          Types (commas separated)
         </label>
         <input
           type="text"
