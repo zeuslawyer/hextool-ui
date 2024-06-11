@@ -5,6 +5,7 @@ import {decodeAbiParameters, parseAbiParameters} from "viem";
 import React, {useState} from "react";
 import {hexstring} from "@/lib/types";
 
+// TODO @zeuslawyer refactor this to use the IOForm component.
 const AbiDecodeComponent = () => {
   // State variables to store input values
   let [hexInput, setHexInput] = useState<hexstring | string>("");
@@ -28,14 +29,14 @@ const AbiDecodeComponent = () => {
       <h1 className="text-2xl font-semibold mb-4 text-center">ABI.DECODE</h1>
       <div className="w-full mb-10">
         <label htmlFor="hex" className="block text- font-medium text-gray-700">
-          Hex encoded values
+          Hex-encoded string
         </label>
         <textarea
           id="hex"
           value={hexInput}
           placeholder={"0x"}
           onChange={e => setHexInput(e.target.value as hexstring)}
-          className="py-2 px-4 bg-gray-800 text-white rounded-md focus:outline-none mb-4"
+          className="border rounded px-2 py-1 bg-black text-slate-300"
         />
       </div>
       <div className="mb-10">
@@ -48,7 +49,7 @@ const AbiDecodeComponent = () => {
           value={valuesInput}
           placeholder="e.g. 'uint256, address, string'"
           onChange={e => setValuesInput(e.target.value)}
-          className="py-2 px-4 bg-gray-800 text-white rounded-md focus:outline-none mb-4"
+          className="border rounded px-2 py-1 bg-black text-slate-300"
         />
       </div>
       {decodedOutput.length ? (

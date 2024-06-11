@@ -15,4 +15,8 @@ export const ROUTES: RouteListItem[] = [
     text: "String From Hex",
     path: "/string-from-hex",
   },
+  {
+    text: "Decode Error",
+    path: "/decode-error",
+  },
 ];

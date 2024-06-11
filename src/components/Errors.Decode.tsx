@@ -39,16 +39,18 @@ const ErrorDecoder = () => {
       hexInput = `0x${hexInput}`;
     }
     let abi;
+    // TODO @zeuslawyer wrap in try catch and see if decoding 0x07da6ee6 is correctly handled.
+    // getAbi needs to be refactored to take in an input.
     const decoded = decodeErrorResult({
       abi,
-      data: hexInput as hexstring, // 
+      data: hexInput as hexstring, //
     });
     console.log(decoded);
   };
 
   return (
     <div className="mx-auto  mt-8 p-6 border rounded-sm shadow-lg bg-white">
-      <h1 className="text-2xl font-semibold mb-4 text-center">ABI.DECODE</h1>
+      <h1 className="text-2xl font-semibold mb-4 text-center">ERROR DECODE</h1>
       <div className="w-full mb-10">
         <label htmlFor="hex" className="block text- font-medium text-gray-700">
           Error Hex String
@@ -58,7 +60,7 @@ const ErrorDecoder = () => {
           value={hexInput}
           placeholder={"0x"}
           onChange={e => setHexInput(e.target.value as hexstring)}
-          className="py-2 px-4 bg-gray-800 text-white rounded-md focus:outline-none mb-4"
+          className="border rounded px-2 py-1 bg-black text-slate-300"
         />
       </div>
 

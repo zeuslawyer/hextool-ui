@@ -9,7 +9,7 @@ const UnitsPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1>Units Converter</h1>
+      <h1>Decode Hex To String</h1>
       <IOForm onSubmit={handleFormSubmit} />
     </div>
   );
