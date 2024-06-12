@@ -1,7 +1,8 @@
 "use client";
 
 import {decodeErrorResult} from "viem";
-// fetch https://github.com/Cyfrin/ccip-contracts/blob/main/contracts-ccip/abi/v0.8/Router.json
+import {Abi} from "abitype";
+import {toast} from "react-toastify";
 
 import React, {useEffect, useState} from "react";
 import {hexstring} from "@/lib/types";
@@ -9,8 +10,10 @@ import {hexstring} from "@/lib/types";
 const ErrorDecoder = () => {
   // State variables to store input values
   let [hexInput, setHexInput] = useState<hexstring | string>("");
-  let [abi, setAbi] = useState("");
-  let [decodedOutput, setDecodedOutput] = useState<{errorName: string; args: any[]} | null>(null); // Array of decoded values [value1, value2, ...
+  let [abi, setAbi] = useState<string | Abi>("");
+  let [decodedOutput, setDecodedOutput] = useState<{errorName: string; args?: any[]; errorMessage?: string} | null>(
+    null
+  ); // Array of decoded values [value1, value2, ...
 
   useEffect(() => {
     async function getAbi() {
@@ -19,12 +22,13 @@ const ErrorDecoder = () => {
           " https://raw.githubusercontent.com/Cyfrin/ccip-contracts/main/contracts-ccip/abi/v0.8/Router.json "
         ); ////https://jsonplaceholder.typicode.com/todos/1
 
-        console.log("Look here ", res);
         if (!res.ok) {
           throw new Error(`Failed to fetch ABI: ${res.status} from ${res.url}`);
         }
+
         setAbi(await res.json());
       } catch (error: any) {
+        console.log("ERROR??? ", error);
         setDecodedOutput({errorName: "Error", args: [error.message]});
       }
     }
@@ -33,19 +37,26 @@ const ErrorDecoder = () => {
 
   // Function to handle decoding
   const handleDecode = async () => {
+    setDecodedOutput(null);
+
     // Implement decoding logic here
-    console.log("Decoding Error...");
     if (hexInput.slice(0, 2) !== "0x") {
       hexInput = `0x${hexInput}`;
     }
-    let abi;
-    // TODO @zeuslawyer wrap in try catch and see if decoding 0x07da6ee6 is correctly handled.
-    // getAbi needs to be refactored to take in an input.
-    const decoded = decodeErrorResult({
-      abi,
-      data: hexInput as hexstring, //
-    });
-    console.log(decoded);
+
+    try {
+      const decoded = decodeErrorResult({
+        abi: abi as Abi,
+        data: hexInput as hexstring,
+      });
+      console.log(decoded);
+      setDecodedOutput({errorName: decoded.abiItem.name, args: decoded.args});
+    } catch (error) {
+      console.log("Didnt work  ", error);
+      // TODO @zeuslawyer why is toast not firing?
+      toast.error(`Error decoding hex " ${error.name}`);
+      alert(`Error decoding hex " ${error.name}`);
+    }
   };
 
   return (
